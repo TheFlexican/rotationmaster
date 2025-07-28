@@ -20,7 +20,7 @@
 ## X-Author-Server: Atiesh
 ## X-Author-Faction: Horde
 
-## X-Author-MoP-Refactor: Freakshow
+## X-Author-MoP-Refactor: Chifreak
 ## X-Author-MoP-Server: Pyrewood Village 
 ## X-Author-MoP-Faction: Alliance
 
