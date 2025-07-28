@@ -1,7 +1,17 @@
 # Rotation Master
 
-## [1.4.3f](https://github.com/TheFlexican/rotationmaster/tree/feat/mop-compatible) (2025-07-28)
-[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/1.4.3e...1.4.3f)
+## [2.0.1](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-07-28)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.0...2.0.1)
+
+### Performance Improvements
+- **PERFORMANCE**: Improved polling performance by changing default interval from 0.15s to 0.25s (40% reduction in CPU usage)
+- **PERFORMANCE**: Increased minimum polling interval from 0.05s to 0.1s to prevent overly aggressive settings
+
+### Credits
+- Performance optimizations implemented with assistance from GitHub Copilot
+
+## [2.0.0](https://github.com/TheFlexican/rotationmaster/tree/feat/mop-compatible) (2025-07-28)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/1.4.3e...2.0.0)
 
 ### MoP Classic Compatibility (feat/mop-compatible branch)
 - **BREAKING**: Updated Interface version from 11403 (WotLK) to 50400 (MoP Classic 5.4.0)

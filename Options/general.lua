@@ -98,7 +98,7 @@ local function create_primary_options(frame)
     poll:SetFullWidth(true)
     poll:SetLabel(L["Polling Interval (seconds)"])
     poll:SetValue(profile["poll"])
-    poll:SetSliderValues(0.05, 1.0, 0.05)
+    poll:SetSliderValues(0.1, 1.0, 0.05)
     poll:SetCallback("OnValueChanged", function(_, _, val)
         profile["poll"] = val
         if addon.rotationTimer then
