@@ -462,6 +462,13 @@ L["%s mana"] = true
 L["%s mana defecit"] = true
 L["Mana Percentage"] = true
 
+L["Energy"] = true
+L["%s energy"] = true
+L["%s energy defecit"] = true
+
+L["Chi"] = true
+L["%s chi"] = true
+
 L["Power"] = true
 L["%s power"] = true
 L["%s power defecit"] = true

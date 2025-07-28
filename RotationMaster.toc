@@ -79,3 +79,6 @@ Conditions/spatial.lua
 Conditions/spatial_stats.lua
 Conditions/weapon.lua
 Conditions/misc.lua
+
+# Monk Support (MoP Classic)
+Conditions/monk_conditions.lua
