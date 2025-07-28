@@ -1,8 +1,8 @@
-## Interface: 11403
+## Interface: 50500
 ## Title: Rotation Master
-## Version: 1.4.3e
+## Version: 1.4.3f
 ## Author: Makiel
-## Notes: I wanted to save the world, but God wouldn't give me the source code.
+## Notes: Refactored addon to support WoW Classic MoP
 ## X-Email: prez@neuromancy.net
 ## X-Website: https://github.com/corporategoth/rotationmaster/wiki
 ## X-BugReport: https://github.com/corporategoth/rotationmaster/issues
@@ -19,6 +19,10 @@
 ## X-License: MIT
 ## X-Author-Server: Atiesh
 ## X-Author-Faction: Horde
+
+## X-Author-MoP-Refactor: Freakshow
+## X-Author-MoP-Server: Pyrewood Village 
+## X-Author-MoP-Faction: Alliance
 
 globals.lua
 embeds.xml
