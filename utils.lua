@@ -576,8 +576,13 @@ end
 function addon:GetSpecialization()
     if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
         return GetSpecialization()
+    elseif LE_EXPANSION_LEVEL_CURRENT >= 4 then
+        -- MoP Classic and later: Use specialization system
+        -- Return the current spec (1-3 typically)
+        return self.currentSpec or 1
     elseif LE_EXPANSION_LEVEL_CURRENT >= 2 then
-        return GetActiveTalentGroup()
+        -- WotLK Classic: Use talent groups (dual spec)
+        return GetActiveTalentGroup and GetActiveTalentGroup() or 1
     else
         return 0
     end

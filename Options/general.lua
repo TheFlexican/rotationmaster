@@ -1171,12 +1171,45 @@ create_class_options = function (frame, classID)
         end)
 
         frame:AddChild(tabs)
-    elseif (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT >= 2) then
+    elseif (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT >= 4) then
+        -- MoP Classic and later: Use specialization system similar to mainline
         local tabs = AceGUI:Create("TabGroup")
         addon.specTab = tabs
 
         local spec_tabs = {}
-        for i=1,GetNumTalentGroups() do
+        -- In MoP Classic, we have 3 specs per class typically
+        -- Use a fallback approach since exact APIs may differ
+        local numSpecs = 3 -- Most classes have 3 specs in MoP
+        for i = 1, numSpecs do
+            if currentSpec == nil then
+                currentSpec = i
+            end
+            table.insert(spec_tabs, {
+                value = i,
+                text = addon.db.char.specs[i] or string.format("Spec %d", i)
+            })
+        end
+
+        tabs:SetTabs(spec_tabs)
+        tabs:SetLayout("Fill")
+
+        tabs:SetCallback("OnGroupSelected", function(_, _, val)
+            create_spec_options(tabs, val, (val == addon.currentSpec) and addon.currentRotation or DEFAULT)
+        end)
+        frame.frame:SetScript("OnShow", function()
+            tabs:SelectTab(addon.currentSpec)
+        end)
+
+        frame:AddChild(tabs)
+    elseif (WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT >= 2) then
+        -- WotLK Classic: Use talent groups (dual spec system)
+        local tabs = AceGUI:Create("TabGroup")
+        addon.specTab = tabs
+
+        local spec_tabs = {}
+        -- Check if GetNumTalentGroups exists before using it
+        local numTalentGroups = GetNumTalentGroups and GetNumTalentGroups() or 1
+        for i=1,numTalentGroups do
             table.insert(spec_tabs, {
                 value = i,
                 text = addon.db.char.specs[i] or tostring(i)

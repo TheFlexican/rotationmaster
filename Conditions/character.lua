@@ -282,12 +282,69 @@ if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
                 "Those who keep everyone else alive by healing them.  Thank them!")))
         end
     })
+elseif (LE_EXPANSION_LEVEL_CURRENT >= 4) then
+    -- MoP Classic and later: Use the new talent system similar to mainline
+    addon:RegisterCondition("TALENT", {
+        description = L["Talent"],
+        icon = "Interface\\Icons\\Inv_misc_book_11",
+        fields = { value = "number" },
+        valid = function(_, value)
+            return value.value ~= nil and value.value >= 1 and value.value <= 18 -- 6 tiers * 3 talents
+        end,
+        evaluate = function(value)
+            local tier = math.floor((value.value-1) / 3) + 1
+            local column = ((value.value-1) % 3) + 1
+            local selected = select(4, addon.getCached(addon.longtermCache, GetTalentInfo, tier, column, 1))
+            return selected
+        end,
+        print = function(spec, value)
+            return string.format(L["you are talented in %s"], addon.nullable(addon:GetSpecTalentName(spec, value.value), L["<talent>"]))
+        end,
+        widget = function(parent, spec, value)
+            local top = parent:GetUserData("top")
+            local root = top:GetUserData("root")
+            local funcs = top:GetUserData("funcs")
+
+            local talent = AceGUI:Create("Dropdown")
+            talent:SetLabel(L["Talent"])
+            talent:SetCallback("OnValueChanged", function(_, _, v)
+                value.value = v
+                top:SetStatusText(funcs:print(root, spec))
+            end)
+            talent.configure = function()
+                local list, order = {}, {}
+                if spec ~= nil and addon.specTalents ~= nil and addon.specTalents[spec] ~= nil then
+                    for idx, v in pairs(addon.specTalents[spec]) do
+                        if v.name ~= nil then
+                            local tier = math.floor((idx-1) / 3) + 1
+                            list[idx] = string.format(L["%s (Tier %d)"], v.name, tier)
+                            table.insert(order, idx)
+                        end
+                    end
+                end
+                talent:SetList(list, order)
+                if (value.value ~= nil) then
+                    talent:SetValue(value.value)
+                end
+            end
+            parent:AddChild(talent)
+        end,
+        help = function(frame)
+            frame:AddChild(helpers.CreateText(color.BLIZ_YELLOW .. L["Talent"] .. color.RESET .. " - " ..
+                "Test whether the character has selected a particular talent choice."))
+        end
+    })
 else
+    -- WotLK Classic and earlier: Use the old talent tree system
     addon:RegisterCondition("TALENT", {
         description = L["Talent"],
         icon = "Interface\\Icons\\Inv_misc_book_11",
         fields = { tree = "number", talent = "number", operator = "string", value = "number" },
         valid = function(_, value)
+            -- Check if GetNumTalentTabs exists before using it
+            if not GetNumTalentTabs then
+                return false
+            end
             return (value.tree ~= nil and value.tree >= 1 and value.tree <= GetNumTalentTabs() and
                     value.talent ~= nil and value.talent >= 1 and value.talent <= GetNumTalents(value.tree) and
                     value.operator ~= nil and addon.isin(addon.operators, value.operator) and
@@ -312,6 +369,15 @@ else
             local top = parent:GetUserData("top")
             local root = top:GetUserData("root")
             local funcs = top:GetUserData("funcs")
+
+            -- Check if talent API exists before using it
+            if not GetNumTalentTabs then
+                local errorText = AceGUI:Create("Label")
+                errorText:SetText("Talent system not available in this version")
+                errorText:SetColor(1, 0, 0)
+                parent:AddChild(errorText)
+                return
+            end
 
             local talentTrees = {}
             local talentTreesOrder = {}
@@ -432,7 +498,8 @@ else
         end
     })
 
-    if LE_EXPANSION_LEVEL_CURRENT >= 2 then
+    if (LE_EXPANSION_LEVEL_CURRENT >= 2 and LE_EXPANSION_LEVEL_CURRENT < 4) then
+        -- WotLK Classic only: Role system based on talent groups
         addon:RegisterCondition("ROLE", {
             description = L["Role"],
             icon = "Interface\\Icons\\spell_brokenheart",
@@ -441,7 +508,12 @@ else
                 return value.value ~= nil and addon.isin(addon.roles, value.value)
             end,
             evaluate = function(value, cache)
-                return addon.getCached(cache, GetTalentGroupRole, addon.currentSpec) == value.value
+                -- Check if GetTalentGroupRole exists before using it
+                if GetTalentGroupRole then
+                    return addon.getCached(cache, GetTalentGroupRole, addon.currentSpec) == value.value
+                else
+                    return false
+                end
             end,
             print = function(_, value)
                 return string.format(L["Your talent is a %s role"],

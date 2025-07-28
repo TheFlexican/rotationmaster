@@ -224,8 +224,11 @@ function SpellLoader:UpdateFromSpellBook(spec)
 		local _, _, offset, numSpells, _, offspecId = GetSpellTabInfo(i)
         if offspecId == 0 then
             offspecId = spec
-        elseif (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
-            specSpells[offspecId] = {}
+        else
+            -- Initialize specSpells for offspecId if it doesn't exist
+            if not specSpells[offspecId] then
+                specSpells[offspecId] = {}
+            end
         end
 
 		for j=1,numSpells do

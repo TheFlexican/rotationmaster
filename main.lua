@@ -1196,19 +1196,40 @@ function addon:UpdateSkill()
                 }
             end
         end
-    elseif (LE_EXPANSION_LEVEL_CURRENT >= 2) then
+    elseif (LE_EXPANSION_LEVEL_CURRENT >= 4) then
+        -- MoP Classic and later: Use the new talent system (6 tiers, 3 choices each)
         if self.specTalents[self.currentSpec] == nil then
             self.specTalents[self.currentSpec] = {}
 
-            for i = 1, GetNumTalentTabs() do
-                self.specTalents[self.currentSpec][i] = {}
-                for j = 1, GetNumTalents(i) do
-                    local name, icon, _, _, rank = GetTalentInfo(i, j)
-                    self.specTalents[self.currentSpec][i][j] = {
+            for i = 1, 18 do -- 6 tiers * 3 talents = 18 total talents
+                local tier = floor((i - 1) / 3) + 1
+                local column = ((i - 1) % 3) + 1
+                local _, name, icon = GetTalentInfo(tier, column, 1)
+                if name then
+                    self.specTalents[self.currentSpec][i] = {
                         name = name,
-                        icon = icon,
-                        rank = rank
+                        icon = icon
                     }
+                end
+            end
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT >= 2) then
+        -- WotLK Classic: Use the old talent tree system with tabs
+        if self.specTalents[self.currentSpec] == nil then
+            self.specTalents[self.currentSpec] = {}
+
+            -- Check if GetNumTalentTabs exists before using it
+            if GetNumTalentTabs then
+                for i = 1, GetNumTalentTabs() do
+                    self.specTalents[self.currentSpec][i] = {}
+                    for j = 1, GetNumTalents(i) do
+                        local name, icon, _, _, rank = GetTalentInfo(i, j)
+                        self.specTalents[self.currentSpec][i][j] = {
+                            name = name,
+                            icon = icon,
+                            rank = rank
+                        }
+                    end
                 end
             end
         end
