@@ -1,5 +1,14 @@
 # Rotation Master
 
+## [2.0.2](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-07-29)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.1...2.0.2)
+
+### Technical Changes
+- **UPDATED**: Ace3 libraries updated to Ace3-r1365-alpha for improved compatibility and stability
+
+### Credits
+- Combat-aware polling implemented with assistance from GitHub Copilot
+
 ## [2.0.1](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-07-28)
 [Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.0...2.0.1)
 
