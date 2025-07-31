@@ -276,12 +276,19 @@ local function add_effect_group(specID, rotid, rot, refresh)
     color_pick:SetColor(rot.color.r, rot.color.g, rot.color.b, rot.color.a)
     color_pick:SetLabel(L["Highlight Color"])
     color_pick:SetDisabled(rot.effect == NONE or effect == nil or effect.type == "dazzle" or effect.type == "custom")
-    color_pick:SetCallback("OnValueConfirmed", function(_, _, r, g, b, a)
+    color_pick:SetCallback("OnValueChanged", function(_, _, r, g, b, a)
         rot.color = { r = r, g = g, b = b, a = a }
         addon:HideGlow(effect_icon.frame, "effect")
         addon:Glow(effect_icon.frame, "effect", effect, rot.color, 1.0, "CENTER", 0, 0)
         addon:RemoveCooldownGlowIfCurrent(specID, rotid, rot)
     end)
+    -- This seem to be doing nothing.
+    -- color_pick:SetCallback("OnValueConfirmed", function(_, _, r, g, b, a)
+    --     rot.color = { r = r, g = g, b = b, a = a }
+    --     addon:HideGlow(effect_icon.frame, "effect")
+    --     addon:Glow(effect_icon.frame, "effect", effect, rot.color, 1.0, "CENTER", 0, 0)
+    --     addon:RemoveCooldownGlowIfCurrent(specID, rotid, rot)
+    -- end)
     group:AddChild(color_pick)
 
     local position_group = AceGUI:Create("SimpleGroup")
