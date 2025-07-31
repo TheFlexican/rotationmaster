@@ -16,7 +16,7 @@ function helpers.CreateText(text, font, fontheight)
     rv:SetText(text .. color.RESET)
     if font then
         if fontheight then
-            rv:SetFont(font, fontheight)
+            rv:SetFont(font, fontheight, "")
         else
             rv:SetFontObject(font)
         end
