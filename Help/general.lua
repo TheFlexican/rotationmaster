@@ -40,6 +40,13 @@ function addon.layout_primary_options_help(frame)
             "/rm set <rotation>" .. color.RESET .. " command, however this option is persistent through UI reloads."))
 
     group:AddChild(Gap())
+    group:AddChild(CreateText(color.BLIZ_YELLOW .. L["Combat-Only Mode"] .. color.RESET .. " - " ..
+            L["Only evaluate rotations and register rotation events when in combat. Significantly reduces CPU usage when out of combat."] ..
+            " When enabled, the addon will only monitor basic events (zone changes, spec changes, etc.) when out of combat, " ..
+            "and automatically enable full rotation functionality when entering combat. When disabled, the addon behaves " ..
+            "like previous versions with all events active at all times."))
+
+    group:AddChild(Gap())
     group:AddChild(CreateText(color.BLIZ_YELLOW .. L["Live Status Update Frequency (seconds)"] .. color.RESET .. " - " ..
             "How often should we check cooldown or rotation step conditions (while the configuration menu is " ..
             "open) to update the " .. color.GREEN .. L["Currently satisfied"] .. color.RESET .. " or " .. color.RED ..

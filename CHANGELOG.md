@@ -1,5 +1,48 @@
 # Rotation Master
 
+## [2.1.0](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-08-01)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.2...2.1.0)
+
+### Major Performance Optimization - Combat-Only Operation
+- **PERFORMANCE**: Implemented combat-only rotation system - addon now only performs rotation evaluation when actually in combat
+- **NEW**: Added "Combat-Only Mode" checkbox in General options to allow players to enable/disable this feature
+- **PERFORMANCE**: Added intelligent event registration system:
+  - Registers only minimal events when enabled but out of combat (9 essential events)
+  - Automatically registers full rotation events when entering combat (40+ events)
+  - Automatically unregisters rotation events when leaving combat
+- **PERFORMANCE**: Dramatic reduction in CPU usage when out of combat (estimated 80-90% reduction in event processing)
+- **NEW**: Added combat detection polling system (100ms intervals) to manage combat state transitions
+- **IMPROVED**: Enhanced `enable()` function to support both combat-only and legacy modes
+- **IMPROVED**: Added `RegisterRotationEvents()` and `UnregisterRotationEvents()` functions for dynamic event management
+- **IMPROVED**: Added `SetCombatOnlyMode()` function to handle mode switching
+
+### Bug Fixes
+- **FIXED**: Resolved AceLocale error for missing cleanup command localization string
+- **FIXED**: Fixed nil reference error in optionsFrames when addon disabled and reloaded
+- **FIXED**: Added automatic options initialization with proper error handling
+- **FIXED**: Ensured glows are properly removed when exiting combat
+- **IMPROVED**: Added defensive nil checks throughout options handling code
+
+### Localization
+- **LOCALIZATION**: Added "/rm cleanup - Removes all migrated profile rotations" string
+- **LOCALIZATION**: Added "Options not ready. Please wait for addon to fully load." string  
+- **LOCALIZATION**: Added "Failed to initialize options interface." string
+- **LOCALIZATION**: Added "Combat-Only Mode" and related help text strings
+
+### Technical Changes
+- Created separate event arrays for minimal vs. full rotation operation
+- Enhanced `CheckCombatStatus()` function to handle event registration and glow removal
+- Modified `enable()` function to support both combat-only and legacy operation modes
+- Added comprehensive glow cleanup when exiting combat
+- Improved error handling for options interface initialization
+- Added combat-only mode checkbox in General options with comprehensive help documentation
+
+### Performance Impact
+This release significantly reduces the addon's resource usage when not actively in combat, making it much more efficient for players who spend time in cities, traveling, or doing non-combat activities while keeping the addon enabled.
+
+### Credits
+- Combat-only optimization system implemented with assistance from GitHub Copilot
+
 ## [2.0.2](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-07-29)
 [Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.1...2.0.2)
 
