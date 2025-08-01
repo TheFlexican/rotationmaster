@@ -23,6 +23,7 @@ L["The current rotation is " .. color.WHITE .. "%s" .. color.INFO] = true
 L["Active rotation manually switched to " .. color.WHITE .. "%s" .. color.INFO] = true
 L["Could not find rotation named " .. color.WHITE .. "%s" .. color.WARN .. " for your current specialization."] = true
 L["Invalid option " .. color.WHITE .. "%s" .. color.WARN] = true
+L["Failed to initialize options interface."] = true
 
 L["Starting up version %s"] = true
 L["Rotaion " .. color.WHITE .. "%s" .. color.DEBUG .. " is now available for auto-switching."] = true
