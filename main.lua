@@ -186,8 +186,19 @@ function addon:HandleCommand(str)
         addon:print(L["/rm repair              - Fix any DB errors found in the data with internal validation."])
 
     elseif cmd == "config" then
-         Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
-         Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
+        if self.optionsFrames and self.optionsFrames.Rotation then
+            Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
+            Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
+        else
+            -- Options not initialized yet, set them up now
+            self:SetupOptions()
+            if self.optionsFrames and self.optionsFrames.Rotation then
+                Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
+                Settings.OpenToCategory(self.optionsFrames.Rotation.frame)
+            else
+                addon:warn(L["Failed to initialize options interface."])
+            end
+        end
 
     elseif cmd == "disable" then
         addon:disable()
@@ -443,8 +454,19 @@ function DataBroker.OnClick(_, button)
         UIDropDownMenu_Initialize(dropdownFrame, minimapInitialize)
         ToggleDropDownMenu(1, nil, dropdownFrame, "cursor", 5, -10)
     elseif button == "LeftButton" then
-         Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
-         Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
+        if addon.optionsFrames and addon.optionsFrames.Rotation then
+            Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
+            Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
+        else
+            -- Options not initialized yet, set them up now
+            addon:SetupOptions()
+            if addon.optionsFrames and addon.optionsFrames.Rotation then
+                Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
+                Settings.OpenToCategory(addon.optionsFrames.Rotation.frame)
+            else
+                addon:warn(L["Failed to initialize options interface."])
+            end
+        end
     end
 end
 
