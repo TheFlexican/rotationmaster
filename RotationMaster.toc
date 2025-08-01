@@ -1,6 +1,6 @@
 ## Interface: 50500
 ## Title: Rotation Master
-## Version: 1.4.3f
+## Version: 2.0.3
 ## Author: Makiel
 ## Notes: Refactored addon to support WoW Classic MoP
 ## X-Email: prez@neuromancy.net
