@@ -55,6 +55,7 @@ local defaults = {
         loglevel = 2,
         detailed_profiling = false,
         disable_autoswitch = false,
+        combat_only = true,
         live_config_update = 2,
         spell_history = 60,
         combat_history = 10,
@@ -558,9 +559,14 @@ function addon:UnregisterRotationEvents()
 end
 
 function addon:enable()
-    -- Only register minimal events for basic functionality and combat detection
-    for _, v in pairs(minimal_events) do
-        self:RegisterEvent(v)
+    if self.db.profile.combat_only then
+        -- Combat-only mode: Only register minimal events for basic functionality and combat detection
+        for _, v in pairs(minimal_events) do
+            self:RegisterEvent(v)
+        end
+    else
+        -- Legacy mode: Register all rotation events immediately
+        self:RegisterRotationEvents()
     end
     
     if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
@@ -581,12 +587,23 @@ function addon:enable()
     end
 
     self:UpdateSkill()
-    self:StartCombatPolling()
+    
+    if self.db.profile.combat_only then
+        self:StartCombatPolling()
+    else
+        -- Legacy mode: Enable rotation immediately if we have one
+        self:EnableRotation()
+        if UnitAffectingCombat("player") then
+            self:EnableRotationTimer()
+        end
+    end
 end
 
 function addon:disable()
     self:DisableRotation()
-    self:StopCombatPolling()
+    if self.db.profile.combat_only then
+        self:StopCombatPolling()
+    end
     if self.nextWindow then
         local spells = self.db.profile.preview_spells
         self.nextWindow:Release()
@@ -597,6 +614,25 @@ function addon:disable()
     self.combatHistory = {}
     self:UnregisterAllEvents()
 
+end
+
+-- Handle switching between combat-only and legacy modes
+function addon:SetCombatOnlyMode(enabled)
+    local wasEnabled = self.currentRotation ~= nil
+    
+    if wasEnabled then
+        -- Temporarily disable to reset state
+        self:disable()
+        -- Re-enable with new mode
+        self:enable()
+    else
+        -- Just update the polling state
+        if enabled then
+            self:StartCombatPolling()
+        else
+            self:StopCombatPolling()
+        end
+    end
 end
 
 function addon:OnEnable()
@@ -801,6 +837,11 @@ function addon:StopCombatPolling()
 end
 
 function addon:CheckCombatStatus()
+    -- Only do combat-based event management if combat_only mode is enabled
+    if not self.db.profile.combat_only then
+        return
+    end
+    
     local inCombat = UnitAffectingCombat("player")
     
     if inCombat and not self.rotationTimer and self.currentRotation then

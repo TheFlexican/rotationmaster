@@ -117,6 +117,16 @@ local function create_primary_options(frame)
     end)
     general_group:AddChild(disable_autoswitch)
 
+    local combat_only = AceGUI:Create("CheckBox")
+    combat_only:SetFullWidth(true)
+    combat_only:SetLabel(L["Combat-Only Mode"])
+    combat_only:SetValue(profile["combat_only"])
+    combat_only:SetCallback("OnValueChanged", function(_, _, val)
+        profile["combat_only"] = val
+        addon:SetCombatOnlyMode(val)
+    end)
+    general_group:AddChild(combat_only)
+
     local live_config_update = AceGUI:Create("Slider")
     live_config_update:SetFullWidth(true)
     live_config_update:SetLabel(L["Live Status Update Frequency (seconds)"])
