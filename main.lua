@@ -95,7 +95,21 @@ if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and
     defaults.char.specs[2] = SECONDARY
 end
 
-local events = {
+-- Minimal events needed for basic addon functionality and combat detection
+local minimal_events = {
+    'PLAYER_ENTERING_WORLD',
+    'PLAYER_REGEN_DISABLED', -- Enter combat
+    'PLAYER_REGEN_ENABLED',  -- Exit combat
+    'ZONE_CHANGED',
+    'ZONE_CHANGED_INDOORS',
+    'CHARACTER_POINTS_CHANGED',
+    "UPDATE_SHAPESHIFT_FORM",
+    "PLAYER_SPECIALIZATION_CHANGED", -- For mainline
+    "PLAYER_TALENT_UPDATE", -- For wrath
+}
+
+-- Full events for active rotation management
+local rotation_events = {
     -- Conditions that indicate a major combat event that should trigger an immediate
     -- evaluation of the rotation conditions (or will disable your rotation entirely).
     'PLAYER_TARGET_CHANGED',
@@ -147,6 +161,9 @@ local events = {
     "SPELL_DATA_LOAD_RESULT",
     "ITEM_DATA_LOAD_RESULT"
 }
+
+-- Legacy alias for backward compatibility
+local events = rotation_events
 
 local mainline_events = {
     'PLAYER_FOCUS_CHANGED',
@@ -236,7 +253,6 @@ function addon:HandleCommand(str)
             self.skipAnnounce = true
             self.avail_announced = {}
             self.announced = {}
-            self:EnableRotationTimer()
             DataBroker.text = self:GetRotationName(DEFAULT)
             AceEvent:SendMessage("ROTATIONMASTER_ROTATION", self.currentRotation, self:GetRotationName(self.currentRotation))
             addon:info(L["Active rotation manually switched to " .. color.WHITE .. "%s" .. color.INFO], name)
@@ -250,7 +266,6 @@ function addon:HandleCommand(str)
                         self.skipAnnounce = true
                         self.avail_announced = {}
                         self.announced = {}
-                        self:EnableRotationTimer()
                         DataBroker.text = self:GetRotationName(id)
                         AceEvent:SendMessage("ROTATIONMASTER_ROTATION", self.currentRotation, self:GetRotationName(self.currentRotation))
                         addon:info(L["Active rotation manually switched to " .. color.WHITE .. "%s" .. color.INFO], name)
@@ -330,6 +345,7 @@ function addon:OnInitialize()
     self.rotationTimer = nil
     self.fetchTimer = nil
     self.shapeshiftTimer = nil
+    self.combatPollTimer = nil
 
     -- This is a cache of spec based spell names -> IDs.  Updated when we switch specs.
     self.specSpells = {}
@@ -401,7 +417,6 @@ local function minimapChangeRotation(_, arg1, _, _)
             addon.skipAnnounce = true
             addon.avail_announced = {}
             addon.announced = {}
-            addon:EnableRotationTimer()
             DataBroker.text = addon:GetRotationName(arg1)
             AceEvent:SendMessage("ROTATIONMASTER_ROTATION", addon.currentRotation, addon:GetRotationName(addon.currentRotation))
         end
@@ -489,33 +504,76 @@ function addon:toggle()
     end
 end
 
-function addon:enable()
-    for _, v in pairs(events) do
+-- Register all rotation events for active rotation management
+function addon:RegisterRotationEvents()
+    for _, v in pairs(rotation_events) do
         self:RegisterEvent(v)
     end
+    if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
+        for _, v in pairs(mainline_events) do
+            self:RegisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 2) then
+        for _, v in pairs(wrath_events) do
+            self:RegisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 1) then
+        for _, v in pairs(tbc_events) do
+            self:RegisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 0) then
+        for _, v in pairs(classic_events) do
+            self:RegisterEvent(v)
+        end
+    end
+end
+
+-- Unregister rotation events but keep minimal events for basic functionality
+function addon:UnregisterRotationEvents()
+    for _, v in pairs(rotation_events) do
+        self:UnregisterEvent(v)
+    end
+    if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
+        for _, v in pairs(mainline_events) do
+            self:UnregisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 2) then
+        for _, v in pairs(wrath_events) do
+            self:UnregisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 1) then
+        for _, v in pairs(tbc_events) do
+            self:UnregisterEvent(v)
+        end
+    elseif (LE_EXPANSION_LEVEL_CURRENT == 0) then
+        for _, v in pairs(classic_events) do
+            self:UnregisterEvent(v)
+        end
+    end
+    
+    -- Re-register minimal events that we always need
+    for _, v in pairs(minimal_events) do
+        self:RegisterEvent(v)
+    end
+end
+
+function addon:enable()
+    -- Only register minimal events for basic functionality and combat detection
+    for _, v in pairs(minimal_events) do
+        self:RegisterEvent(v)
+    end
+    
     if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
         self.currentSpec = GetSpecializationInfo(addon:GetSpecialization())
         if self.specTab then
             self.specTab:SelectTab(self.currentSpec)
         end
-        for _, v in pairs(mainline_events) do
-            self:RegisterEvent(v)
-        end
     elseif (LE_EXPANSION_LEVEL_CURRENT == 2) then
         self.currentSpec = addon:GetSpecialization()
-        for _, v in pairs(wrath_events) do
-            self:RegisterEvent(v)
-        end
     elseif (LE_EXPANSION_LEVEL_CURRENT == 1) then
         self.currentSpec = 0
-        for _, v in pairs(tbc_events) do
-            self:RegisterEvent(v)
-        end
     elseif (LE_EXPANSION_LEVEL_CURRENT == 0) then
         self.currentSpec = 0
-        for _, v in pairs(classic_events) do
-            self:RegisterEvent(v)
-        end
     end
 
     if self.db.profile.preview_spells > 0 then
@@ -523,11 +581,12 @@ function addon:enable()
     end
 
     self:UpdateSkill()
-    self:EnableRotation()
+    self:StartCombatPolling()
 end
 
 function addon:disable()
     self:DisableRotation()
+    self:StopCombatPolling()
     if self.nextWindow then
         local spells = self.db.profile.preview_spells
         self.nextWindow:Release()
@@ -674,7 +733,6 @@ function addon:SwitchRotation()
             self.skipAnnounce = true
             self.avail_announced = {}
             self.announced = {}
-            self:EnableRotationTimer()
             DataBroker.text = self:GetRotationName(newRotation)
             AceEvent:SendMessage("ROTATIONMASTER_ROTATION", self.currentRotation, self:GetRotationName(self.currentRotation))
         end
@@ -717,7 +775,7 @@ function addon:DisableRotation()
 end
 
 function addon:EnableRotationTimer()
-    if self.currentRotation and not self.rotationTimer then
+    if self.currentRotation and not self.rotationTimer and UnitAffectingCombat("player") then
         self.rotationTimer = self:ScheduleRepeatingTimer('EvaluateNextAction', self.db.profile.poll)
     end
 end
@@ -726,6 +784,34 @@ function addon:DisableRotationTimer()
     if self.rotationTimer then
         self:CancelTimer(self.rotationTimer)
         self.rotationTimer = nil
+    end
+end
+
+function addon:StartCombatPolling()
+    if not self.combatPollTimer then
+        self.combatPollTimer = self:ScheduleRepeatingTimer('CheckCombatStatus', 0.1) -- Check every 100ms
+    end
+end
+
+function addon:StopCombatPolling()
+    if self.combatPollTimer then
+        self:CancelTimer(self.combatPollTimer)
+        self.combatPollTimer = nil
+    end
+end
+
+function addon:CheckCombatStatus()
+    local inCombat = UnitAffectingCombat("player")
+    
+    if inCombat and not self.rotationTimer and self.currentRotation then
+        -- Entered combat, register all rotation events and start rotation timer
+        self:RegisterRotationEvents()
+        self:EnableRotationTimer()
+    elseif not inCombat and self.rotationTimer then
+        -- Left combat, stop rotation timer, remove glows, and unregister rotation events
+        self:DisableRotationTimer()
+        self:RemoveAllCurrentGlows()
+        self:UnregisterRotationEvents()
     end
 end
 
@@ -1416,7 +1502,6 @@ addon.PLAYER_CONTROL_GAINED = wrapEvent(function(self)
         self:SwitchRotation()
     end
 
-    self:EnableRotationTimer()
     self:EvaluateNextAction()
 end)
 
