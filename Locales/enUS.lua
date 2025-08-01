@@ -225,6 +225,7 @@ L["Detailed Profiling"] = true
 L["Disable Auto-Switching"] = true
 L["Combat-Only Mode"] = true
 L["Only evaluate rotations and register rotation events when in combat. Significantly reduces CPU usage when out of combat."] = true
+L["Timing Settings"] = true
 L["Minimap Icon"] = true
 L["Spell History Memory (seconds)"] = true
 L["Combat History Memory (seconds)"] = true
@@ -307,7 +308,6 @@ L["Resistance"] = true
 L["Immune"] = true
 L["Spell School"] = true
 L["Partial"] = true
-
 L["Started"] = true
 L["Stopped"] = true
 L["Succeeded"] = true

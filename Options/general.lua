@@ -80,6 +80,7 @@ local function create_primary_options(frame)
     general_group:SetLayout("Table")
     general_group:SetUserData("table", { columns = { 1, 1 } })
 
+    -- Checkbox section - all checkboxes at the top
     local enable = AceGUI:Create("CheckBox")
     enable:SetFullWidth(true)
     enable:SetLabel(ENABLE)
@@ -94,6 +95,88 @@ local function create_primary_options(frame)
     end)
     general_group:AddChild(enable)
 
+    local disable_autoswitch = AceGUI:Create("CheckBox")
+    disable_autoswitch:SetFullWidth(true)
+    disable_autoswitch:SetLabel(L["Disable Auto-Switching"])
+    disable_autoswitch:SetValue(profile["disable_autoswitch"])
+    disable_autoswitch:SetCallback("OnValueChanged", function(_, _, val)
+        profile["disable_autoswitch"] = val
+    end)
+    general_group:AddChild(disable_autoswitch)
+
+    local minimap = AceGUI:Create("CheckBox")
+    minimap:SetFullWidth(true)
+    minimap:SetLabel(L["Minimap Icon"])
+    minimap:SetValue(not profile["minimap"].hide)
+    minimap:SetCallback("OnValueChanged", function(_, _, val)
+        profile["minimap"].hide = not val
+        if val then
+            DBIcon:Show(addon.name)
+        else
+            DBIcon:Hide(addon.name)
+        end
+    end)
+    general_group:AddChild(minimap)
+
+    local combat_only = AceGUI:Create("CheckBox")
+    combat_only:SetFullWidth(true)
+    combat_only:SetLabel(L["Combat-Only Mode"])
+    combat_only:SetValue(profile["combat_only"])
+    combat_only:SetCallback("OnValueChanged", function(_, _, val)
+        profile["combat_only"] = val
+        addon:SetCombatOnlyMode(val)
+        if not val then
+            -- Remove all current glows when disabling combat-only mode
+            addon:RemoveAllCurrentGlows()
+        end
+    end)
+    general_group:AddChild(combat_only)
+
+    -- Additional checkboxes section
+    local ignore_mana = AceGUI:Create("CheckBox")
+    ignore_mana:SetFullWidth(true)
+    ignore_mana:SetLabel(L["Ignore Mana"])
+    ignore_mana:SetValue(profile["ignore_mana"])
+    ignore_mana:SetCallback("OnValueChanged", function(_, _, val)
+        profile["ignore_mana"] = val
+    end)
+    general_group:AddChild(ignore_mana)
+
+    local ignore_range = AceGUI:Create("CheckBox")
+    ignore_range:SetFullWidth(true)
+    ignore_range:SetLabel(L["Ignore Range"])
+    ignore_range:SetValue(profile["ignore_range"])
+    ignore_range:SetCallback("OnValueChanged", function(_, _, val)
+        profile["ignore_range"] = val
+    end)
+    general_group:AddChild(ignore_range)
+
+    local disable_buttons = AceGUI:Create("CheckBox")
+    disable_buttons:SetFullWidth(true)
+    disable_buttons:SetLabel(L["Disable Bar Highlighting"])
+    disable_buttons:SetValue(profile["disable_buttons"])
+    disable_buttons:SetCallback("OnValueChanged", function(_, _, val)
+        if val == true then
+            addon:GlowClear()
+        end
+        profile["disable_buttons"] = val
+    end)
+    general_group:AddChild(disable_buttons)
+
+    scroll:AddChild(general_group)
+
+    -- Timing Settings Header
+    local timing_header = AceGUI:Create("Heading")
+    timing_header:SetFullWidth(true)
+    timing_header:SetText(L["Timing Settings"])
+    scroll:AddChild(timing_header)
+
+    -- Timing Settings Group - for all the sliders
+    local timing_group = AceGUI:Create("SimpleGroup")
+    timing_group:SetFullWidth(true)
+    timing_group:SetLayout("Table")
+    timing_group:SetUserData("table", { columns = { 1, 1 } })
+
     local poll = AceGUI:Create("Slider")
     poll:SetFullWidth(true)
     poll:SetLabel(L["Polling Interval (seconds)"])
@@ -106,26 +189,7 @@ local function create_primary_options(frame)
             addon:EnableRotationTimer()
         end
     end)
-    general_group:AddChild(poll)
-
-    local disable_autoswitch = AceGUI:Create("CheckBox")
-    disable_autoswitch:SetFullWidth(true)
-    disable_autoswitch:SetLabel(L["Disable Auto-Switching"])
-    disable_autoswitch:SetValue(profile["disable_autoswitch"])
-    disable_autoswitch:SetCallback("OnValueChanged", function(_, _, val)
-        profile["disable_autoswitch"] = val
-    end)
-    general_group:AddChild(disable_autoswitch)
-
-    local combat_only = AceGUI:Create("CheckBox")
-    combat_only:SetFullWidth(true)
-    combat_only:SetLabel(L["Combat-Only Mode"])
-    combat_only:SetValue(profile["combat_only"])
-    combat_only:SetCallback("OnValueChanged", function(_, _, val)
-        profile["combat_only"] = val
-        addon:SetCombatOnlyMode(val)
-    end)
-    general_group:AddChild(combat_only)
+    timing_group:AddChild(poll)
 
     local live_config_update = AceGUI:Create("Slider")
     live_config_update:SetFullWidth(true)
@@ -143,21 +207,7 @@ local function create_primary_options(frame)
             end
         end
     end)
-    general_group:AddChild(live_config_update)
-
-    local minimap = AceGUI:Create("CheckBox")
-    minimap:SetFullWidth(true)
-    minimap:SetLabel(L["Minimap Icon"])
-    minimap:SetValue(not profile["minimap"].hide)
-    minimap:SetCallback("OnValueChanged", function(_, _, val)
-        profile["minimap"].hide = not val
-        if val then
-            DBIcon:Show(addon.name)
-        else
-            DBIcon:Hide(addon.name)
-        end
-    end)
-    general_group:AddChild(minimap)
+    timing_group:AddChild(live_config_update)
 
     local spell_history = AceGUI:Create("Slider")
     spell_history:SetFullWidth(true)
@@ -167,16 +217,7 @@ local function create_primary_options(frame)
     spell_history:SetCallback("OnValueChanged", function(_, _, val)
         profile["spell_history"] = val
     end)
-    general_group:AddChild(spell_history)
-
-    local ignore_mana = AceGUI:Create("CheckBox")
-    ignore_mana:SetFullWidth(true)
-    ignore_mana:SetLabel(L["Ignore Mana"])
-    ignore_mana:SetValue(profile["ignore_mana"])
-    ignore_mana:SetCallback("OnValueChanged", function(_, _, val)
-        profile["ignore_mana"] = val
-    end)
-    general_group:AddChild(ignore_mana)
+    timing_group:AddChild(spell_history)
 
     local combat_history = AceGUI:Create("Slider")
     combat_history:SetFullWidth(true)
@@ -186,16 +227,7 @@ local function create_primary_options(frame)
     combat_history:SetCallback("OnValueChanged", function(_, _, val)
         profile["combat_history"] = val
     end)
-    general_group:AddChild(combat_history)
-
-    local ignore_range = AceGUI:Create("CheckBox")
-    ignore_range:SetFullWidth(true)
-    ignore_range:SetLabel(L["Ignore Range"])
-    ignore_range:SetValue(profile["ignore_range"])
-    ignore_range:SetCallback("OnValueChanged", function(_, _, val)
-        profile["ignore_range"] = val
-    end)
-    general_group:AddChild(ignore_range)
+    timing_group:AddChild(combat_history)
 
     local damage_history = AceGUI:Create("Slider")
     damage_history:SetFullWidth(true)
@@ -205,20 +237,9 @@ local function create_primary_options(frame)
     damage_history:SetCallback("OnValueChanged", function(_, _, val)
         profile["damage_history"] = val
     end)
-    general_group:AddChild(damage_history)
+    timing_group:AddChild(damage_history)
 
-    local disable_buttons = AceGUI:Create("CheckBox")
-    disable_buttons:SetFullWidth(true)
-    disable_buttons:SetLabel(L["Disable Bar Highlighting"])
-    disable_buttons:SetValue(profile["disable_buttons"])
-    disable_buttons:SetCallback("OnValueChanged", function(_, _, val)
-        if val == true then
-            addon:GlowClear()
-        end
-        profile["disable_buttons"] = val
-    end)
-    general_group:AddChild(disable_buttons)
-
+    -- Preview section in timing settings
     local preview_group = AceGUI:Create("SimpleGroup")
     preview_group:SetFullWidth(true)
     preview_group:SetLayout("Table")
@@ -265,9 +286,9 @@ local function create_primary_options(frame)
         preview_reset:SetDisabled(true)
     end
 
-    general_group:AddChild(preview_group)
+    timing_group:AddChild(preview_group)
 
-    scroll:AddChild(general_group)
+    scroll:AddChild(timing_group)
 
     local effect_header = AceGUI:Create("Heading")
     effect_header:SetFullWidth(true)
