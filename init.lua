@@ -247,6 +247,7 @@ local function updateRotationData(rot_func, cond_func)
         if cond.type == "NOT" and cond.value ~= nil then
             updateConditionData(cond.value, func)
         elseif cond.type == "AND" or cond.type == "OR" and cond.value ~= nil then
+            addon:print("Updating condition data for", cond.type, "condition")
             for _, subcond in pairs(cond.value) do
                 updateConditionData(subcond, func)
             end

@@ -27,6 +27,7 @@
 globals.lua
 embeds.xml
 locales.xml
+
 constants.lua
 utils.lua
 profiler.lua
@@ -34,6 +35,8 @@ main.lua
 buttons.lua
 init.lua
 validate.lua
+
+
 
 Widgets/help.lua
 Widgets/directional.lua
@@ -79,6 +82,13 @@ Conditions/spatial.lua
 Conditions/spatial_stats.lua
 Conditions/weapon.lua
 Conditions/misc.lua
+
+# Wizard System
+Wizard/init.lua
+Wizard/gui.lua
+Wizard/monk.lua
+Wizard/rogue.lua
+Wizard/template.lua
 
 # Monk Support (MoP Classic)
 Conditions/monk_conditions.lua
