@@ -493,48 +493,6 @@ function addon:getDefaultItemset(id)
     end
 end
 
-local function moveProfileItems()
-    if not addon.db.profile.version or addon.db.profile.version < 2 then
-        local rotations = addon.db.char.rotations
-        addon.db.char.rotations = nil
-        local itemsets = addon.db.char.itemsets
-        addon.db.char.itemsets = nil
-        local announces = addon.db.char.announces
-        addon.db.char.announces = nil
-
-        local notempty = ((rotations and next(rotations) ~= nil) or
-                          (itemsets and next(itemsets) ~= nil) or
-                          (announces and next(announces) ~= nil))
-
-        if addon.db:GetCurrentProfile() == DEFAULT then
-            addon.db:SetProfile(classKey)
-            local modified = ((addon.db.profile.rotations and next(addon.db.profile.rotations) ~= nil) or
-                              (addon.db.profile.itemsets and next(addon.db.profile.itemsets) ~= nil) or
-                              (addon.db.profile.announces and next(addon.db.profile.announces) ~= nil))
-
-            if modified then
-                if notempty then
-                    addon.db:SetProfile(UnitName("player") .. " - " .. GetRealmName())
-                    addon.db:CopyProfile(DEFAULT, true)
-                end
-            else
-                addon.db:CopyProfile(DEFAULT, true)
-            end
-        end
-
-        if rotations and next(rotations) ~= nil then
-            addon.db.profile.rotations = rotations
-        end
-
-        if itemsets and next(itemsets) ~= nil then
-            addon.db.profile.itemsets = itemsets
-        end
-
-        if announces and next(announces) ~= nil then
-            addon.db.profile.announces = announces
-        end
-    end
-end
 
 function addon:augmentDefaults(defaults)
     defaults.char.version = CHAR_VERSION
@@ -551,7 +509,6 @@ function addon:augmentDefaults(defaults)
 end
 
 function addon:init()
-    moveProfileItems()
 
     for k,v in pairs(default_itemsets) do
         if addon.db.global.itemsets[k] ~= nil and not addon.db.global.itemsets[k].modified then
