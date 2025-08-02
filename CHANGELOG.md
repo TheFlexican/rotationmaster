@@ -1,5 +1,62 @@
 # Rotation Master
 
+## [2.2.1a](https://github.com/TheFlexican/rotationmaster/tree/feat/wizards) (2025-08-02)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1...2.2.1a)
+
+### Class Wizard Expansion
+- **NEW**: Added Wizard support for all remaining classes:
+  - Warrior (Arms, Fury)
+  - Paladin (Retribution)
+  - Hunter (Beast Mastery, Marksmanship, Survival)
+  - Priest (Shadow)
+  - Death Knight (Frost, Unholy)
+  - Shaman (Elemental, Enhancement)
+  - Mage (Arcane, Fire, Frost)
+  - Warlock (Affliction, Demonology, Destruction)
+  - Druid (Balance, Feral)
+- **IMPROVED**: All DPS specs now have optimized single-target rotations
+- **IMPROVED**: Comprehensive condition setups for all class resources and abilities
+
+### Credits
+- Complete class wizard implementation with assistance from GitHub Copilot
+
+## [2.2.1](https://github.com/TheFlexican/rotationmaster/tree/feat/wizards) (2025-08-01)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.0...2.2.1)
+
+### Class Wizard Initial Implementation
+- **NEW**: Added Monk class wizard with optimized rotations for:
+  - Windwalker (DPS)
+  - Brewmaster (Tank)
+- **NEW**: Added Rogue class wizard with optimized rotations for:
+  - Assassination
+  - Combat
+  - Subtlety
+- **IMPROVED**: Enhanced wizard system to support per-class rotation creation
+- **IMPROVED**: Detailed condition setup for class-specific resources and abilities
+
+### Credits
+- Initial class wizard implementation with assistance from GitHub Copilot
+
+## [2.2.0](https://github.com/TheFlexican/rotationmaster/tree/feat/wizards) (2025-07-31)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.1.0...2.2.0)
+
+### Rotation Creation Wizard System
+- **NEW**: Added WizardSystem framework for automated rotation creation
+- **NEW**: Created wizard GUI for generating class and spec-specific rotations
+- **NEW**: Implemented wizard initialization system in init.lua
+- **NEW**: Added basic wizard template for creating standard rotations
+- **IMPROVED**: Enhanced rotation handling to support wizard-generated rotations
+- **IMPROVED**: Added rotation registration system for tracking created rotations
+
+### Technical Changes
+- Created Wizard/ directory structure with core wizard files
+- Implemented class registration system for wizard modules
+- Added rotation template system for standardized rotation creation
+- Enhanced UI to support wizard-guided rotation setup
+
+### Credits
+- Wizard system implemented with assistance from GitHub Copilot
+
 ## [2.1.0](https://github.com/TheFlexican/rotationmaster/tree/master) (2025-08-01)
 [Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.0.2...2.1.0)
 
