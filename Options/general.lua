@@ -535,6 +535,22 @@ end
 
     frame:AddChild(scroll)
 
+   -- Setup Wizard Button
+    local wizard_header = AceGUI:Create("Heading")
+    wizard_header:SetText(L["Setup Wizard"])
+    wizard_header:SetFullWidth(true)
+    scroll:AddChild(wizard_header)
+
+    local wizard_button = AceGUI:Create("Button")
+    wizard_button:SetFullWidth(false)
+    wizard_button:SetText(L["Start Setup Wizard"])
+    wizard_button:SetCallback("OnClick", function()
+        addon.WizardSystem:ShowWizard()
+    end)
+    scroll:AddChild(wizard_button)
+
+
+
     local help = AceGUI:Create("Help")
     help:SetLayout(addon.layout_primary_options_help)
     help:SetTitle(addon.pretty_name)

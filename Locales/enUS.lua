@@ -45,6 +45,12 @@ L["Removing all glows."] = true
 L["Active rotation is incomplete and may not work correctly!"] = true
 L["Cache hit rate at %.02f%%"] = true
 
+
+-- from stats.lua
+
+L["Points"] = true
+L["Enemies"] = true
+L["%s addon.points"] = true
 -- from constants.lua
 
 L["Spells"] = true
@@ -689,3 +695,33 @@ L["Global"] = true
 L["Damage and Heals"] = true
 L["Damage Only"] = true
 L["Heals Only"] = true
+
+-- Wizard System
+L["Setup Wizard"] = true
+L["Start Setup Wizard"] = true
+L["RotationMaster: "] = true
+L[" Setup Wizard"] = true
+L["This wizard will help you set up basic rotations for your "] = true
+L[". You can customize these later in the Rotations section."] = true
+L["Select Specialization"] = true
+L["Rotation Spells"] = true
+L["Cooldown Spells"] = true
+L["Rotation Name"] = true
+L["Create Rotation"] = true
+L["Created new rotation: "] = true
+L["Rotation"] = true
+L["Cooldowns"] = true
+L["No setup wizard is available for your class yet."] = true
+L["RotationMaster: "] = true
+L["Setup Wizard"] = true
+L["Setup complete!"] = true
+L["Basic rotations have been created. You can now customize them in the Rotations tab."] = true
+L["Existing rotations have been updated. You can find them in the Rotations tab."] = true
+L["Rotations have been created or updated. You can find them in the Rotations tab."] = true
+L["Updated rotation: "] = true
+L["Created rotation: "] = true
+L["Overwriting existing rotation: %s"] = true
+L["Creating new rotation: %s"] = true
+
+-- from utils.lua
+L[" Setup Wizard"] = true
