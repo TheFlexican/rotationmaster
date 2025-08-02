@@ -340,7 +340,7 @@ function MonkWizard:CreateBrewmasterRotations()
                         type = "CHI",
                         unit = "player",
                         operator = "GREATERTHAN",
-                        value = 1000
+                        value = 2
                     },
                     {
                         type = "NOT",
