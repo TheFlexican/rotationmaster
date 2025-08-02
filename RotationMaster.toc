@@ -1,6 +1,6 @@
 ## Interface: 50500
 ## Title: Rotation Master
-## Version: 2.2.1a
+## Version: 2.2.2a
 ## Author: Makiel
 ## Notes: Refactored addon to support WoW Classic MoP
 ## X-Email: prez@neuromancy.net
@@ -86,9 +86,17 @@ Conditions/misc.lua
 # Wizard System
 Wizard/init.lua
 Wizard/gui.lua
+Wizard/deathknight.lua
+Wizard/druid.lua
+Wizard/hunter.lua
+Wizard/mage.lua
 Wizard/monk.lua
+Wizard/paladin.lua
+Wizard/priest.lua
 Wizard/rogue.lua
-Wizard/template.lua
+Wizard/shaman.lua
+Wizard/warlock.lua
+Wizard/warrior.lua
 
 # Monk Support (MoP Classic)
 Conditions/monk_conditions.lua
