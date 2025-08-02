@@ -75,6 +75,9 @@ local function create_primary_options(frame)
     scroll:SetFullHeight(true)
     scroll:SetLayout("Flow")
 
+
+
+    
     local general_group = AceGUI:Create("SimpleGroup")
     general_group:SetFullWidth(true)
     general_group:SetLayout("Table")
@@ -163,7 +166,6 @@ local function create_primary_options(frame)
     end)
     general_group:AddChild(disable_buttons)
 
-    scroll:AddChild(general_group)
 
     -- Timing Settings Header
     local timing_header = AceGUI:Create("Heading")
@@ -532,6 +534,21 @@ end
     debug_group:AddChild(detailed_profiling)
 
     scroll:AddChild(debug_group)
+
+   -- Setup Wizard Button
+    local wizard_header = AceGUI:Create("Heading")
+    wizard_header:SetText(L["Setup Wizard"])
+    wizard_header:SetFullWidth(true)
+    scroll:AddChild(wizard_header)
+
+    local wizard_button = AceGUI:Create("Button")
+    wizard_button:SetFullWidth(false)
+    wizard_button:SetText(L["Start Setup Wizard"])
+    wizard_button:SetCallback("OnClick", function()
+        addon.WizardSystem:ShowWizard()
+    end)
+    scroll:AddChild(wizard_button)
+
 
     frame:AddChild(scroll)
 
@@ -1379,3 +1396,4 @@ function addon:SetupOptions()
     AceConfig:RegisterOptionsTable(addon.name .. "About", about)
     self.optionsFrames.About = AceConfigDialog:AddToBlizOptions(addon.name .. "About", L["About"], self.optionsFrames.General.frame.name)
 end
+
