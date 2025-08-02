@@ -761,7 +761,7 @@ function MonkWizard:CreateMistweaverRotations()
     local singleTarget = addon.WizardSystem:CreateBasicRotation("Mistweaver Single Target", singleTargetSpells)
 
     -- Save rotations and track their names
-    local _, singleTargetName = addon.WizardSystem:SaveRotation(singleTarget)
+    local _, singleTargetName = addon.WizardSystem:SaveRotation(singleTarget, specId)
     
     table.insert(createdRotations, singleTargetName)
     
