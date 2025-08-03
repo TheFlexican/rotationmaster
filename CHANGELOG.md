@@ -1,4 +1,11 @@
 # Rotation Master
+## [2.2.7](https://github.com/TheFlexican/rotationmaster/tree/feat/warlock-embers) (2025-08-03)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.6...2.2.7)
+
+### Technical Changes
+- Added Monk and Warlock resources to the character sections in conditions tabs
+
+
 
 ## [2.2.6](https://github.com/TheFlexican/rotationmaster/tree/feat/warlock-embers) (2025-08-03)
 [Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1a...2.2.6)
