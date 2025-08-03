@@ -255,6 +255,11 @@ function WizardSystem:SaveRotation(rotation, specID)
     
     addon.db.profile.rotations[1][id] = rotation
     
+    -- Set version numbers to prevent migration logic from running
+    addon.db.char.version = addon.CHAR_VERSION
+    addon.db.profile.version = addon.PROFILE_VERSION
+    addon.db.global.version = addon.GLOBAL_VERSION
+    
     return id, rotation.name
 end
 

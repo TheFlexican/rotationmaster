@@ -4,9 +4,14 @@ local L = LibStub("AceLocale-3.0"):GetLocale(addon_name)
 
 local multiinsert, deepcopy = addon.multiinsert, addon.deepcopy
 
-local CHAR_VERSION = 1
-local PROFILE_VERSION = 2
-local GLOBAL_VERSION = 1
+-- Make version constants globally accessible for wizard system
+addon.CHAR_VERSION = 1
+addon.PROFILE_VERSION = 2
+addon.GLOBAL_VERSION = 1
+
+local CHAR_VERSION = addon.CHAR_VERSION
+local PROFILE_VERSION = addon.PROFILE_VERSION
+local GLOBAL_VERSION = addon.GLOBAL_VERSION
 
 local classKey = select(2, UnitClass("player"))
 
@@ -247,7 +252,6 @@ local function updateRotationData(rot_func, cond_func)
         if cond.type == "NOT" and cond.value ~= nil then
             updateConditionData(cond.value, func)
         elseif cond.type == "AND" or cond.type == "OR" and cond.value ~= nil then
-            addon:debug("Updating condition data for", cond.type, "condition")
             for _, subcond in pairs(cond.value) do
                 updateConditionData(subcond, func)
             end
@@ -508,7 +512,51 @@ function addon:augmentDefaults(defaults)
     defaults.profile.version = PROFILE_VERSION
 end
 
+local function moveProfileItems()
+    if not addon.db.profile.version or addon.db.profile.version < 2 then
+        local rotations = addon.db.char.rotations
+        addon.db.char.rotations = nil
+        local itemsets = addon.db.char.itemsets
+        addon.db.char.itemsets = nil
+        local announces = addon.db.char.announces
+        addon.db.char.announces = nil
+
+        local notempty = ((rotations and next(rotations) ~= nil) or
+                          (itemsets and next(itemsets) ~= nil) or
+                          (announces and next(announces) ~= nil))
+
+        if addon.db:GetCurrentProfile() == DEFAULT then
+            addon.db:SetProfile(classKey)
+            local modified = ((addon.db.profile.rotations and next(addon.db.profile.rotations) ~= nil) or
+                              (addon.db.profile.itemsets and next(addon.db.profile.itemsets) ~= nil) or
+                              (addon.db.profile.announces and next(addon.db.profile.announces) ~= nil))
+
+            if modified then
+                if notempty then
+                    addon.db:SetProfile(UnitName("player") .. " - " .. GetRealmName())
+                    addon.db:CopyProfile(DEFAULT, true)
+                end
+            else
+                addon.db:CopyProfile(DEFAULT, true)
+            end
+        end
+
+        if rotations and next(rotations) ~= nil then
+            addon.db.profile.rotations = rotations
+        end
+
+        if itemsets and next(itemsets) ~= nil then
+            addon.db.profile.itemsets = itemsets
+        end
+
+        if announces and next(announces) ~= nil then
+            addon.db.profile.announces = announces
+        end
+    end
+end
+
 function addon:init()
+    moveProfileItems()
 
     for k,v in pairs(default_itemsets) do
         if addon.db.global.itemsets[k] ~= nil and not addon.db.global.itemsets[k].modified then
@@ -531,4 +579,3 @@ function addon:init()
     addon.db.profile.version = PROFILE_VERSION
     addon.db.global.version = GLOBAL_VERSION
 end
-
