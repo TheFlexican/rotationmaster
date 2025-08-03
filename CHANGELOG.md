@@ -1,5 +1,25 @@
 # Rotation Master
 
+## [2.2.5](https://github.com/TheFlexican/rotationmaster/tree/feat/warlock-embers) (2025-08-03)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1a...2.2.5)
+
+### Warlock Resource System Enhancement
+- **NEW**: Added comprehensive Warlock resource condition support for MoP Classic:
+  - **Soul Shards** condition (Power Type 7) for Affliction Warlocks
+  - **Burning Embers** condition (Power Type 14) for Destruction Warlocks  
+  - **Demonic Fury** condition (Power Type 15) for Demonology Warlocks
+- **NEW**: Created `warlock_conditions.lua` with all three Warlock resource types
+- **LOCALIZATION**: Added English localization for "Soul Shards", "Burning Embers", "Demonic Fury" and related terms
+
+### Technical Changes
+- Added `Conditions/warlock_conditions.lua` to TOC file for proper loading
+- Implemented resource conditions following the same pattern as Monk Chi conditions
+- Added proper power type mappings for all Warlock specialization resources
+- Enhanced rotation wizard system to support Warlock-specific resource mechanics
+
+### Credits
+- Warlock resource system implemented with assistance from GitHub Copilot
+
 ## [2.2.1a](https://github.com/TheFlexican/rotationmaster/tree/feat/wizards) (2025-08-02)
 [Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1...2.2.1a)
 
