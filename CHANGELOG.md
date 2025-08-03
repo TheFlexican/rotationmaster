@@ -1,7 +1,7 @@
 # Rotation Master
 
-## [2.2.5](https://github.com/TheFlexican/rotationmaster/tree/feat/warlock-embers) (2025-08-03)
-[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1a...2.2.5)
+## [2.2.6](https://github.com/TheFlexican/rotationmaster/tree/feat/warlock-embers) (2025-08-03)
+[Full Changelog](https://github.com/TheFlexican/rotationmaster/compare/2.2.1a...2.2.6)
 
 ### Warlock Resource System Enhancement
 - **NEW**: Added comprehensive Warlock resource condition support for MoP Classic:
