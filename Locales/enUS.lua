@@ -478,6 +478,15 @@ L["%s energy defecit"] = true
 L["Chi"] = true
 L["%s chi"] = true
 
+L["Soul Shards"] = true
+L["%s soul shards"] = true
+
+L["Burning Embers"] = true
+L["%s burning embers"] = true
+
+L["Demonic Fury"] = true
+L["%s demonic fury"] = true
+
 L["Power"] = true
 L["%s power"] = true
 L["%s power defecit"] = true
