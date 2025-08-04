@@ -30,6 +30,7 @@ local healthstones = {
     "Minor Healthstone",
 }
 
+-- TODO: support MoP food / bandages / health stones
 if (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE) then
     combination_food = { 113509, 80618, 80610, 65499, 43523, 43518, 65517, 65516, 65515, 65500 }
     multiinsert(mana_potions, { 152495, 127835, 109222, 76098, 57192, 33448, 40067, 31677, 22732, 28101 })

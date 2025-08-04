@@ -1327,46 +1327,6 @@ function addon:SetupOptions()
 	category.ID = self.optionsFrames.Rotation.frame.name
 	Settings.RegisterAddOnCategory(category);
 
-    self.optionsFrames.Conditions = AceGUI:Create("BlizOptionsGroup")
-    self.optionsFrames.Conditions:SetName(L["Conditions"], self.optionsFrames.General.frame.name)
-    self.optionsFrames.Conditions:SetUserData("appName", addon.name .. "Conditions")
-    self.optionsFrames.Conditions:SetLayout("Fill")
-    -- self.optionsFrames.Conditions:SetTitle(addon.pretty_name .. " - " .. L["Conditions"])
-    addon:create_condition_list(self.optionsFrames.Conditions)
-    category, layout = Settings.RegisterCanvasLayoutCategory(self.optionsFrames.Conditions.frame, self.optionsFrames.Conditions.frame.name, self.optionsFrames.Conditions.frame.name);
-	category.ID = self.optionsFrames.Conditions.frame.name
-	Settings.RegisterAddOnCategory(category);
-
-    self.optionsFrames.Effects = AceGUI:Create("BlizOptionsGroup")
-    self.optionsFrames.Effects:SetName(L["Effects"], self.optionsFrames.General.frame.name)
-    self.optionsFrames.Effects:SetUserData("appName", addon.name .. "Effects")
-    self.optionsFrames.Effects:SetLayout("Fill")
-    self.optionsFrames.Effects:SetTitle(addon.pretty_name .. " - " .. L["Effects"])
-    addon:create_effect_list(self.optionsFrames.Effects)
-    category, layout = Settings.RegisterCanvasLayoutCategory(self.optionsFrames.Effects.frame, self.optionsFrames.Effects.frame.name, self.optionsFrames.Effects.frame.name);
-	category.ID = self.optionsFrames.Effects.frame.name
-	Settings.RegisterAddOnCategory(category);
-
-    self.optionsFrames.ItemSets = AceGUI:Create("BlizOptionsGroup")
-    self.optionsFrames.ItemSets:SetName(L["Item Sets"], self.optionsFrames.General.frame.name)
-    self.optionsFrames.ItemSets:SetUserData("appName", addon.name .. "ItemSets")
-    self.optionsFrames.ItemSets:SetLayout("Fill")
-    -- self.optionsFrames.ItemSets:SetTitle(addon.pretty_name .. " - " .. L["Item Sets"])
-    addon:create_itemset_list(self.optionsFrames.ItemSets)
-    category, layout = Settings.RegisterCanvasLayoutCategory(self.optionsFrames.ItemSets.frame, self.optionsFrames.ItemSets.frame.name, self.optionsFrames.ItemSets.frame.name);
-	category.ID = self.optionsFrames.ItemSets.frame.name
-	Settings.RegisterAddOnCategory(category);
-
-    self.optionsFrames.Announces = AceGUI:Create("BlizOptionsGroup")
-    self.optionsFrames.Announces:SetName(L["Announces"], self.optionsFrames.General.frame.name)
-    self.optionsFrames.Announces:SetUserData("appName", addon.name .. "Announces")
-    self.optionsFrames.Announces:SetLayout("Fill")
-    self.optionsFrames.Announces:SetTitle(addon.pretty_name .. " - " .. L["Announces"])
-    addon:create_announce_list(self.optionsFrames.Announces)
-    category, layout = Settings.RegisterCanvasLayoutCategory(self.optionsFrames.Announces.frame, self.optionsFrames.Announces.frame.name, self.optionsFrames.Announces.frame.name);
-	category.ID = self.optionsFrames.Announces.frame.name
-	Settings.RegisterAddOnCategory(category);
-
     self.optionsFrames.module = {}
     for _, m in addon:IterateModules() do
         local f = m["SetupOptions"]

@@ -89,6 +89,7 @@ local defaults = {
     }
 }
 
+-- TODO: Rename these to their action spec names
 if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and
    LE_EXPANSION_LEVEL_CURRENT >= 2 then
     defaults.char.specs = {}
